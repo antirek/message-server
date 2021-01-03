@@ -59,6 +59,9 @@ class MessageServerStore {
     }
 
     async addChat (chatId, ownerId) {
+        if (!chatId) {
+            return;
+        }
         return await this.Chat.insertMany([{chatId, ownerId}]);
     }
 

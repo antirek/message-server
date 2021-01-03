@@ -30,9 +30,15 @@ const ChatUserSchema = new mongoose.Schema({
   userId: String,
 });
 
+const TokenSchema = new mongoose.Schema({
+  token: String,
+  userId: String,
+});
+
 module.exports = {
   UserSchema,
   MessageSchema,
   ChatSchema,
   ChatUserSchema,
+  TokenSchema,
 };

@@ -38,10 +38,10 @@ module.exports = (store) => {
     */
    async function post(req, res) {
     const {chatId} = req.params;
-    const { content, type, sender } = req.body;
+    const { content, type } = req.body;
     console.log('get request params', req.params);
     console.log('get request body', req.body);
-    const message = await store.appendMessage(chatId, sender, content, type);
+    const message = await store.appendMessage(chatId, req.user, content, type);
     res.json(message);
   }
 

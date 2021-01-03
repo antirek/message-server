@@ -9,8 +9,10 @@ const {
     ChatUserSchema, 
     MessageSchema,
     UserSchema,
+    TokenSchema,
 } = require('./models');
 const {MessageServerStore} = require('./store');
+const {TokenChecker} = require('./security');
 
 const dbConn = mongoose.createConnection(config.mongodb, {
   useNewUrlParser: true,
@@ -22,8 +24,10 @@ const User = dbConn.model('User', UserSchema);
 const Chat = dbConn.model('Chat', ChatSchema);
 const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
 const Message = dbConn.model('Message', MessageSchema);
+const Token = dbConn.model('Token', TokenSchema);
 
 const store = new MessageServerStore({User, Chat, ChatUser, Message});
+const security = new TokenChecker(Token, User);
 
 const app = createApp({
   apiDoc: require('./api/api-doc.js'),
@@ -31,7 +35,7 @@ const app = createApp({
   dependencies: {
     store,
   },
-});
+}, security);
 
 app.listen(config.port, () => {
     console.log('started');

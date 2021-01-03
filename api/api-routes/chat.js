@@ -4,11 +4,16 @@ module.exports = (store) => {
     * @param {Object} req
     * @param {Object} res
     */
-  async function post(req, res) {    
+  async function post(req, res) {
     const { chatId, ownerId } = req.body;
     console.log('get request body', req.body);
-    const chat = await store.addChat(chatId, ownerId);
-    res.json(chat);
+    try {
+      const chat = await store.addChat(chatId, ownerId);
+      res.json(chat);
+    } catch (err) {
+      console.log('error', err)
+      res.status(500).json({status:'error'});
+    }
   }
 
   post.apiDoc = {
