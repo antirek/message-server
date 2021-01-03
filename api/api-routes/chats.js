@@ -1,4 +1,36 @@
 module.exports = (store) => {
+    /**
+      *
+      * @param {Object} req
+      * @param {Object} res
+      */
+    async function get(req, res) {
+      const userId = req.user.userId;
+      console.log('get request params', req.params);
+      const users = await store.getChatsByUserId(userId);
+      res.json(users);
+    }
+  
+    get.apiDoc = {
+      summary: 'get chats current user',
+      operationId: 'getChats',
+      tags: ['chat'],
+      produces: [
+        'application/json',
+      ],
+      responses: {
+        200: {
+          description: 'requested messages',
+        },
+        default: {
+          description: 'Unexpected error',
+          schema: {
+            $ref: '#/definitions/Error',
+          },
+        },
+      },
+    };
+  
   /**
     *
     * @param {Object} req
@@ -47,6 +79,7 @@ module.exports = (store) => {
   };
   
   return {
+    get,
     post,
   };
 };
