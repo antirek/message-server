@@ -23,11 +23,22 @@ class MessageServerStore {
         return await this.User.find();
     }
 
+    async getUser (userId) {
+        return await this.User.findOne({userId});
+    }
+
     async getUsersByChatId(chatId) {
         const chatUserIds = await this.ChatUser.find({chatId});
         const userIds = chatUserIds.map(chid => chid.userId);
         console.log('userIds array', userIds);
-        const users = await this.User.find({userId:{$in:userIds}});
+        const userProfiles = await this.User.find({userId:{$in:userIds}});        
+        const userProfilesHash = {}; 
+        userProfiles.map(userProfile => {userProfilesHash[userProfile.userId] = userProfile; });
+        const users = chatUserIds.map(chatUserId => {
+            return userProfilesHash[chatUserId.userId] ? 
+                userProfilesHash[chatUserId.userId] : 
+                { userId: chatUserId.userId, name: null, avatarUrl: null};
+        });
         return users;
     }
 
@@ -36,11 +47,11 @@ class MessageServerStore {
     }
 
     async getMessagesByChatId(chatId) {
-        return await this.Message.find({chatId});
+        return await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
     }
 
     async appendUserToChat (userId, chatId) {
-        return await this.ChatUser.insert({userId, chatId});
+        return await this.ChatUser.insertMany([{userId, chatId}]);
     }
 
     async deleteUserFromChat (userId, chatId) {

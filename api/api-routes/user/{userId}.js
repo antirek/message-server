@@ -6,14 +6,13 @@ module.exports = (store) => {
     */
   async function get(req, res) {
     const {userId} = req.params;
-    console.log('get request params', req.params);
-    const users = await store.getChatsByUserId(userId);
-    res.json(users);
+    const user = await store.getUser(userId);
+    res.json(user);
   }
 
   get.apiDoc = {
-    summary: 'get chats by userId',
-    operationId: 'getChats',
+    summary: 'get user',
+    operationId: 'getUser',
     tags: ['user'],
     produces: [
       'application/json',
@@ -31,7 +30,6 @@ module.exports = (store) => {
     },
   };
 
-
   return {
     parameters: [
       {
@@ -42,6 +40,6 @@ module.exports = (store) => {
         description: 'userId',
       },
     ],
-    get: get,
+    get,
   };
 };

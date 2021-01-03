@@ -5,8 +5,6 @@ module.exports = (store) => {
     * @param {Object} res
     */
   async function get(req, res) {
-    const {chatId} = req.params;
-    console.log('get request params', req.params);
     const users = await store.getUsers();
     res.json(users);
   }

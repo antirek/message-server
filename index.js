@@ -1,6 +1,7 @@
 const config = require('config');
 const mongoose = require('mongoose');
 const path = require('path');
+mongoose.set('debug', true);
 
 const createApp = require('./app').createApp;
 const { 
