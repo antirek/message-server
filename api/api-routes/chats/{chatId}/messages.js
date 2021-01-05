@@ -1,4 +1,4 @@
-module.exports = (store) => {
+module.exports = (store, websocketServer) => {
   /**
     *
     * @param {Object} req
@@ -36,12 +36,20 @@ module.exports = (store) => {
     * @param {Object} req
     * @param {Object} res
     */
-   async function post(req, res) {
-    const {chatId} = req.params;
+  async function post(req, res) {
+    const { chatId } = req.params;
     const { content, type } = req.body;
     console.log('get request params', req.params);
     console.log('get request body', req.body);
     const message = await store.appendMessage(chatId, req.user, content, type);
+
+    const users = await store.getUsersByChatId(chatId);
+    console.log('send message users', users);
+    users.forEach(user => {
+      console.log('message', message);
+      websocketServer.send(user.userId, JSON.stringify(message));
+    });
+
     res.json(message);
   }
 

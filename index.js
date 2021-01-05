@@ -2,6 +2,7 @@ const config = require('config');
 const mongoose = require('mongoose');
 const path = require('path');
 mongoose.set('debug', true);
+const http = require("http");
 
 const createApp = require('./app').createApp;
 const { 
@@ -13,6 +14,7 @@ const {
 } = require('./models');
 const {MessageServerStore} = require('./store');
 const {TokenChecker} = require('./security');
+const {WServer} = require('./websocket');
 
 const dbConn = mongoose.createConnection(config.mongodb, {
   useNewUrlParser: true,
@@ -28,15 +30,21 @@ const Token = dbConn.model('Token', TokenSchema);
 
 const store = new MessageServerStore({User, Chat, ChatUser, Message});
 const security = new TokenChecker(Token, User);
+const websocketServer = new WServer();
 
 const app = createApp({
   apiDoc: require('./api/api-doc.js'),
   paths: path.resolve(__dirname, 'api/api-routes'),
   dependencies: {
     store,
+    websocketServer,
   },
 }, security);
 
-app.listen(config.port, () => {
+const server = http.createServer(app);
+websocketServer.setServer(server);
+
+
+server.listen(config.port, () => {
     console.log('started');
 });

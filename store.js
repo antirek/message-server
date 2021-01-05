@@ -69,7 +69,7 @@ class MessageServerStore {
         const date = new Date();
         const message = new this.Message({
             chatId, sender, content, type, date: date.toString()});
-        message.save();
+        return await message.save();
     }
 
     async addUser (userId, name, avatarUrl) {
