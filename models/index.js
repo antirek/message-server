@@ -10,7 +10,10 @@ const UserSchema = new mongoose.Schema({
 });
 
 const MessageSchema = new mongoose.Schema({
-  messageId: String,
+  messageId: {
+    type: String,
+    index: true,
+  },
   date: String,
   chatId: String,
   sender: UserSchema,
@@ -23,17 +26,30 @@ const ChatSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  name: String,
   ownerId: String,
 });
 
 const ChatUserSchema = new mongoose.Schema({
-  chatId: String,
-  userId: String,
+  chatId: {
+    type: String,
+    index: true,
+  },
+  userId: {
+    type: String,
+    index: true,
+  },
 });
 
 const TokenSchema = new mongoose.Schema({
-  token: String,
-  userId: String,
+  token: {
+    type: String,
+    unique: true,
+  },
+  userId: {
+    type: String,
+    unique: true,
+  },
 });
 
 module.exports = {

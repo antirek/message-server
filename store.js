@@ -1,3 +1,5 @@
+const uuidv4 = require('uuid').v4;
+
 class MessageServerStore {
     User;
     Chat;
@@ -58,11 +60,10 @@ class MessageServerStore {
         return await this.ChatUser.remove({userId, chatId});
     }
 
-    async addChat (chatId, ownerId) {
-        if (!chatId) {
-            return;
-        }
-        return await this.Chat.insertMany([{chatId, ownerId}]);
+    async addChat (name = null, ownerId = null) {
+        const chatId = uuidv4();
+        const chat = new this.Chat({chatId, name, ownerId});
+        return await chat.save();
     }
 
     async appendMessage (chatId, sender, content, type) {
