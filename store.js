@@ -84,6 +84,10 @@ class MessageServerStore {
         return await this.User.insertMany([{userId, name, avatarUrl}]);
     }
 
+    async getMessageUserStatusNotViewed(chatId, userId) {
+        return await this.MessageUserStatus.find({chatId, userId, viewed: false}).countDocuments();
+    }
+
     async setMessageUserStatus(chatId, userId, messageId, status) {
         let muStatus = await this.MessageUserStatus.findOne({chatId, userId, messageId});
         if (!muStatus) {

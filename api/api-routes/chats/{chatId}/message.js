@@ -15,10 +15,11 @@ module.exports = (store, websocketServer) => {
 
     const muStatus = await store.setMessageUserStatus(chatId, req.user.userId, messageId, 'viewed');
     console.log('muStatus', muStatus);
-    
+
     const users = await store.getUsersByChatId(chatId);
     console.log('send message users', users);
-    users.forEach(user => {
+    users.forEach(async (user) => {
+      await store.setMessageUserStatus(chatId, user.userId, messageId, 'sended');
       console.log('message', message);
       websocketServer.send(user.userId, JSON.stringify(message));
     });

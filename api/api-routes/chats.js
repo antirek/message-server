@@ -7,8 +7,17 @@ module.exports = (store) => {
     async function get(req, res) {
       const userId = req.user.userId;
       console.log('get request params', req.params);
-      const users = await store.getChatsByUserId(userId);
-      res.json(users);
+      const chats = await store.getChatsByUserId(userId);
+      const chatsInfo = [];
+      for (const chat of chats) {
+        const count = await store.getMessageUserStatusNotViewed(chat.chatId, userId);
+        const info = chat.toObject();
+        console.log('info', info, count);
+        info.countNotViewed = count || 0;
+        chatsInfo.push(info);
+      }
+      console.log(chatsInfo);
+      res.json(chatsInfo);
     }
   
     get.apiDoc = {
