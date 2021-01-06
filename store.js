@@ -29,6 +29,10 @@ class MessageServerStore {
         return await this.User.findOne({userId});
     }
 
+    async getChatByChatId (chatId) {
+        return await this.Chat.findOne({chatId});
+    }
+
     async getUsersByChatId(chatId) {
         const chatUserIds = await this.ChatUser.find({chatId});
         const userIds = chatUserIds.map(chid => chid.userId);

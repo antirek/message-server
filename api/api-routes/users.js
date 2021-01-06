@@ -72,7 +72,7 @@ module.exports = (store) => {
   };
   
   return {
-    get,
-    post,
+    // get,
+    // post,
   };
 };

@@ -21,6 +21,37 @@ const MessageSchema = new mongoose.Schema({
   content: String,
 });
 
+MessageSchema.index({messageId:1, chatId:1},{unique: true});
+
+const MessageUserStatusSchema = new mongoose.Schema({
+  messageId: {
+    type: String,
+    required: true,
+  },
+  chatId: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  sended: {
+    type: Boolean,
+    default: false,
+  },
+  received: {
+    type: Boolean,
+    default: false,
+  },
+  viewed: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+MessageUserStatusSchema.index({messageId:1, chatId:1},{unique: true});
+
 const ChatSchema = new mongoose.Schema({
   chatId: {
     type: String,
@@ -58,4 +89,5 @@ module.exports = {
   ChatSchema,
   ChatUserSchema,
   TokenSchema,
+  MessageUserStatusSchema,
 };
