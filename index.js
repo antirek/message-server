@@ -11,7 +11,9 @@ const {
     MessageSchema,
     UserSchema,
     TokenSchema,
+    MessageUserStatusSchema,
 } = require('./models');
+
 const {MessageServerStore} = require('./store');
 const {TokenChecker} = require('./security');
 const {WServer} = require('./websocket');
@@ -27,9 +29,10 @@ const Chat = dbConn.model('Chat', ChatSchema);
 const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
 const Message = dbConn.model('Message', MessageSchema);
 const Token = dbConn.model('Token', TokenSchema);
+const MessageUserStatus = dbConn.model('MessageUserStatus', MessageUserStatusSchema);
 
-const store = new MessageServerStore({User, Chat, ChatUser, Message});
-const security = new TokenChecker(Token, User);
+const store = new MessageServerStore({User, Chat, ChatUser, Message, MessageUserStatus});
+const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();
 
 const app = createApp({

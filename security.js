@@ -3,7 +3,7 @@ class TokenChecker {
   Token;
   User;
 
-  constructor (Token, User) {
+  constructor ({Token, User}) {
     this.Token = Token;
     this.User = User;
   }

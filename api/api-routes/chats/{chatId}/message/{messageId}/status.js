@@ -1,33 +1,22 @@
-module.exports = (store, websocketServer) => {
-
+module.exports = (store) => {
   /**
     *
     * @param {Object} req
     * @param {Object} res
     */
   async function post(req, res) {
-    const { chatId } = req.params;
-    const { content, type } = req.body;
+    const { chatId, messageId } = req.params;
+    const { status } = req.body;
+
     console.log('get request params', req.params);
     console.log('get request body', req.body);
-    const message = await store.appendMessage(chatId, req.user, content, type);
-    const messageId = message.messageId;
+    const muStatus = await store.setMessageUserStatus(chatId, req.user.userId, messageId, status);
 
-    const muStatus = await store.setMessageUserStatus(chatId, req.user.userId, messageId, 'viewed');
-    console.log('muStatus', muStatus);
-    
-    const users = await store.getUsersByChatId(chatId);
-    console.log('send message users', users);
-    users.forEach(user => {
-      console.log('message', message);
-      websocketServer.send(user.userId, JSON.stringify(message));
-    });
-
-    res.json(message);
+    res.json(muStatus);
   }
 
   post.apiDoc = {
-    summary: 'post message to chatId',
+    summary: 'set status for message by chatId, userId',
     operationId: 'postMessage',
     tags: ['chat'],
     produces: [
@@ -64,6 +53,13 @@ module.exports = (store, websocketServer) => {
         type: 'string',
         required: true,
         description: 'chatId',
+      },
+      {
+        name: 'messageId',
+        in: 'path',
+        type: 'string',
+        required: true,
+        description: 'messageId',
       },
     ],
     post: post,

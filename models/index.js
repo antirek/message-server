@@ -50,7 +50,7 @@ const MessageUserStatusSchema = new mongoose.Schema({
   },
 });
 
-MessageUserStatusSchema.index({messageId:1, chatId:1},{unique: true});
+MessageUserStatusSchema.index({messageId:1, chatId:1, userId:1},{unique: true});
 
 const ChatSchema = new mongoose.Schema({
   chatId: {

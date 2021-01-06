@@ -5,12 +5,14 @@ class MessageServerStore {
     Chat;
     Message;
     ChatUser;
+    MessageUserStatus;
 
-    constructor ({User, Chat, Message, ChatUser}) {
+    constructor ({User, Chat, Message, ChatUser, MessageUserStatus}) {
         this.User = User;
         this.Chat = Chat;
         this.ChatUser = ChatUser;
         this.Message = Message;
+        this.MessageUserStatus = MessageUserStatus;
     }
 
     async getChatsByOwnerId(ownerId) {
@@ -72,13 +74,45 @@ class MessageServerStore {
 
     async appendMessage (chatId, sender, content, type) {
         const date = new Date();
+        const messageId = uuidv4();
         const message = new this.Message({
-            chatId, sender, content, type, date: date.toString()});
+            messageId, chatId, sender, content, type, date: date.toString()});
         return await message.save();
     }
 
     async addUser (userId, name, avatarUrl) {
         return await this.User.insertMany([{userId, name, avatarUrl}]);
+    }
+
+    async setMessageUserStatus(chatId, userId, messageId, status) {
+        let muStatus = await this.MessageUserStatus.findOne({chatId, userId, messageId});
+        if (!muStatus) {
+            muStatus = new this.MessageUserStatus({chatId, userId, messageId});
+        }
+        console.log(muStatus);
+        switch (status) {
+            case 'sended':
+                muStatus.sended = true;
+                break;
+            case 'received':
+                muStatus.sended = true;
+                muStatus.received = true;
+                break;
+            case 'viewed':
+                muStatus.sended = true;
+                muStatus.received = true;
+                muStatus.viewed = true;
+                break;
+            default:
+                break;
+        }
+        await muStatus.save();
+        return muStatus;
+    }
+
+    async getMessageUserStatus(chatId, messageId) {
+        const statuses = await this.MessageUserStatus.find({chatId, messageId});
+        return statuses;
     }
 }
 
