@@ -85,6 +85,10 @@ class MessageServerStore {
     }
 
     async getMessageUserStatusNotViewed(chatId, userId) {
+        return await this.MessageUserStatus.find({chatId, userId, viewed: false});
+    }
+
+    async getMessageUserStatusNotViewedCount(chatId, userId) {
         return await this.MessageUserStatus.find({chatId, userId, viewed: false}).countDocuments();
     }
 
@@ -112,6 +116,13 @@ class MessageServerStore {
         }
         await muStatus.save();
         return muStatus;
+    }
+
+    async setAllMessageUserStatusViewed(chatId, userId) {
+        const muStatuses = await this.getMessageUserStatusNotViewed(chatId, userId);
+        for (const muStatus of muStatuses) {
+            await this.setMessageUserStatus(chatId, userId, muStatus.messageId, 'viewed');
+        }
     }
 
     async getMessageUserStatus(chatId, messageId) {
