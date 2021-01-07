@@ -1,5 +1,4 @@
 module.exports = (store, websocketServer) => {
-
   /**
     *
     * @param {Object} req
@@ -31,7 +30,6 @@ module.exports = (store, websocketServer) => {
         websocketServer.send(user.userId, JSON.stringify({type:'countNotViewed', content: {chatId, userId: user.userId, countNotViewed}}));
       }
     }
-
     res.json(message);
   }
 

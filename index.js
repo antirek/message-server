@@ -6,12 +6,12 @@ const http = require("http");
 
 const createApp = require('./app').createApp;
 const { 
-    ChatSchema, 
-    ChatUserSchema, 
-    MessageSchema,
-    UserSchema,
-    TokenSchema,
-    MessageUserStatusSchema,
+  ChatSchema, 
+  ChatUserSchema, 
+  MessageSchema,
+  UserSchema,
+  TokenSchema,
+  MessageUserStatusSchema,
 } = require('./models');
 
 const {MessageServerStore} = require('./store');
@@ -47,7 +47,6 @@ const app = createApp({
 const server = http.createServer(app);
 websocketServer.setServer(server);
 
-
 server.listen(config.port, () => {
-    console.log('started');
+  console.log('started');
 });
