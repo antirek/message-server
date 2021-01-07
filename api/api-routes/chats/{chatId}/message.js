@@ -18,11 +18,19 @@ module.exports = (store, websocketServer) => {
 
     const users = await store.getUsersByChatId(chatId);
     console.log('send message users', users);
-    users.forEach(async (user) => {
+    for (const user of users) {
       await store.setMessageUserStatus(chatId, user.userId, messageId, 'sended');
       console.log('message', message);
-      websocketServer.send(user.userId, JSON.stringify(message));
-    });
+      websocketServer.send(user.userId, JSON.stringify({type: 'message', content: message}));
+    }
+
+    for (const user of users) {
+      const countNotViewed = await store.getMessageUserStatusNotViewed(chatId, user.userId);
+      console.log('countNotViewed', countNotViewed);
+      if (countNotViewed > 0) {
+        websocketServer.send(user.userId, JSON.stringify({type:'countNotViewed', content: {chatId, userId: user.userId, countNotViewed}}));
+      }
+    }
 
     res.json(message);
   }
