@@ -1,4 +1,4 @@
-module.exports = (store) => {
+module.exports = (store, websocketServer) => {
   /**
     *
     * @param {Object} req
@@ -11,6 +11,13 @@ module.exports = (store) => {
     console.log('get request params', req.params);
     console.log('get request body', req.body);
     const muStatus = await store.setMessageUserStatus(chatId, req.user.userId, messageId, status);
+
+
+    const countNotViewed = await store.getMessageUserStatusNotViewed(chatId, req.user.userId);
+    console.log('countNotViewed', countNotViewed);
+    if (countNotViewed > 0) {
+      websocketServer.send(req.user.userId, JSON.stringify({type:'countNotViewed', content: {chatId, userId: req.user.userId, countNotViewed}}));
+    }
 
     res.json(muStatus);
   }

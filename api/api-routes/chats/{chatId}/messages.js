@@ -1,3 +1,5 @@
+const message = require("./message");
+
 module.exports = (store) => {
   /**
     *
@@ -8,7 +10,19 @@ module.exports = (store) => {
     const {chatId} = req.params;
     console.log('get request params', req.params);
     const messages = await store.getMessagesByChatId(chatId);
-    res.json(messages);
+
+    const messageIds = messages.map(m => m.messageId);
+    const userId = req.user.userId;
+    const statuses = await store.getMessageUserStatusesNotViewed(chatId, userId, messageIds);
+    const notViewed = {};
+    statuses.map(status => notViewed[status.messageId] = true);
+    const messagesFormated = messages.map(message => {
+      const m = message.toObject();
+      m.viewed = notViewed[message.messageId] ? false : true;
+      return m;
+    });
+
+    res.json(messagesFormated);
   }
 
   get.apiDoc = {

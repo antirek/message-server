@@ -118,6 +118,16 @@ class MessageServerStore {
         const statuses = await this.MessageUserStatus.find({chatId, messageId});
         return statuses;
     }
+
+    async getMessageUserStatusesNotViewed(chatId, userId, messageIds) {
+        const statuses = await this.MessageUserStatus.find({
+            chatId,
+            userId,
+            viewed: false,
+            messageId: {$in :messageIds},
+        });
+        return statuses;
+    }
 }
 
 module.exports = {MessageServerStore};
