@@ -5,14 +5,7 @@ mongoose.set('debug', true);
 const http = require("http");
 
 const createApp = require('./app').createApp;
-const { 
-  ChatSchema, 
-  ChatUserSchema, 
-  MessageSchema,
-  UserSchema,
-  TokenSchema,
-  MessageUserStatusSchema,
-} = require('./models');
+const {createModels} = require('./models');
 
 const {MessageServerStore} = require('./store');
 const {TokenChecker} = require('./security');
@@ -24,14 +17,15 @@ const dbConn = mongoose.createConnection(config.mongodb, {
   useUnifiedTopology: true,
 });
 
-const User = dbConn.model('User', UserSchema);
-const Chat = dbConn.model('Chat', ChatSchema);
-const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
-const Message = dbConn.model('Message', MessageSchema);
-const Token = dbConn.model('Token', TokenSchema);
-const MessageUserStatus = dbConn.model('MessageUserStatus', MessageUserStatusSchema);
+const {
+  User, Chat, ChatUser, Message, MessageUserStatus, 
+  Bot, ChatBot, Token,
+} = createModels(dbConn);
 
-const store = new MessageServerStore({User, Chat, ChatUser, Message, MessageUserStatus});
+const store = new MessageServerStore({
+  User, Chat, ChatUser, Message, MessageUserStatus,
+  Bot, ChatBot,
+});
 const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();
 

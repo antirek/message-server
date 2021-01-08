@@ -7,6 +7,8 @@ module.exports = (store, websocketServer) => {
   async function post(req, res) {
     const { chatId } = req.params;
     const { content, type } = req.body;
+    console.log(' ----------------------- new message ------------------- ');
+    console.log('req user', req.user);
     console.log('get request params', req.params);
     console.log('get request body', req.body);
     const message = await store.appendMessage(chatId, req.user, content, type);

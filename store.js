@@ -55,7 +55,9 @@ class MessageServerStore {
     }
 
     async getMessagesByChatId(chatId) {
-        return await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
+        const messages = await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
+        return messages.reverse();
+
     }
 
     async appendUserToChat (userId, chatId) {
@@ -75,8 +77,10 @@ class MessageServerStore {
     async appendMessage (chatId, sender, content, type) {
         const date = new Date();
         const messageId = uuidv4();
-        const message = new this.Message({
-            messageId, chatId, sender, content, type, date: date.toString()});
+        const newMessage = {
+            messageId, chatId, sender, content, type, date: date.toString()};
+            //console.log('new message', newMessage)
+        const message = new this.Message(newMessage);
         return await message.save();
     }
 
