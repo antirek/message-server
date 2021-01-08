@@ -14,6 +14,9 @@ module.exports = (store, websocketServer) => {
     const message = await store.appendMessage(chatId, req.user, content, type);
     const messageId = message.messageId;
 
+    const messageFormated = message.toObject();
+    messageFormated.viewed = false;
+
     const muStatus = await store.setMessageUserStatus(chatId, req.user.userId, messageId, 'viewed');
     console.log('muStatus', muStatus);
 
@@ -21,8 +24,9 @@ module.exports = (store, websocketServer) => {
     console.log('send message users', users);
     for (const user of users) {
       await store.setMessageUserStatus(chatId, user.userId, messageId, 'sended');
-      console.log('message', message);
-      websocketServer.send(user.userId, JSON.stringify({type: 'message', content: message}));
+      if (user.userId === req.user.userId) { messageFormated.viewed = true;}
+      console.log('message', messageFormated);
+      websocketServer.send(user.userId, JSON.stringify({type: 'message', content: messageFormated}));
     }
 
     for (const user of users) {
