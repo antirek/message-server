@@ -1,3 +1,5 @@
+const { stringify } = require("uuid");
+
 module.exports = {
   swagger: '2.0',
   basePath: '/v1',
@@ -9,6 +11,9 @@ module.exports = {
   definitions: {
     Error: {
       additionalProperties: true,
+    },
+    Token: {
+      token: String,
     },
   },
   securityDefinitions: {

@@ -27,14 +27,14 @@ module.exports = (store, websocketServer) => {
   
     get.apiDoc = {
       summary: 'mark message as viewed by chatId, userId',
-      operationId: 'markMessageAsViewed',
+      operationId: 'markMessagesAsViewed',
       tags: ['chat'],
       produces: [
         'application/json',
       ],
       responses: {
         200: {
-          description: 'mark message',
+          description: 'mark messages',
         },
         default: {
           description: 'Unexpected error',

@@ -97,12 +97,27 @@ const createModels = (dbConn) => {
     },
   });
 
+  const RegistrationSchema = new mongoose.Schema({
+    token: {
+      type: String,
+      unique: true,
+    },
+    userId: {
+      type: String,
+      unique: true,
+    },
+    date: {
+      type: String,
+    },
+  });
+
   const Sender = dbConn.model('Sender', SenderSchema);
   const Chat = dbConn.model('Chat', ChatSchema);
   const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
   const ChatBot = dbConn.model('ChatBot', ChatBotSchema);
   const Message = dbConn.model('Message', MessageSchema);
   const Token = dbConn.model('Token', TokenSchema);
+  const Registration = dbConn.model('Registration', RegistrationSchema);
   const MessageUserStatus = dbConn.model('MessageUserStatus', MessageUserStatusSchema);
 
   const User = Sender.discriminator('user', new mongoose.Schema({  
@@ -125,6 +140,7 @@ const createModels = (dbConn) => {
     Chat,
     ChatUser,
     Token,
+    Registration,
     MessageUserStatus,
     Bot,
     ChatBot,

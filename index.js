@@ -15,16 +15,17 @@ const dbConn = mongoose.createConnection(config.mongodb, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const {
   User, Chat, ChatUser, Message, MessageUserStatus, 
-  Bot, ChatBot, Token,
+  Bot, ChatBot, Token, Registration,
 } = createModels(dbConn);
 
 const store = new MessageServerStore({
   User, Chat, ChatUser, Message, MessageUserStatus,
-  Bot, ChatBot,
+  Bot, ChatBot, Registration,
 });
 const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();

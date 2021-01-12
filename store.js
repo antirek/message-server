@@ -8,8 +8,10 @@ class MessageServerStore {
     MessageUserStatus;
     Bot;
     ChatBot;
+    Registration;
 
-    constructor ({User, Chat, Message, ChatUser, MessageUserStatus, Bot, ChatBot, }) {
+    constructor ({User, Chat, Message, ChatUser, 
+        MessageUserStatus, Bot, ChatBot, Registration, }) {
         this.User = User;
         this.Chat = Chat;
         this.ChatBot = ChatBot;
@@ -17,6 +19,7 @@ class MessageServerStore {
         this.ChatUser = ChatUser;
         this.Message = Message;
         this.MessageUserStatus = MessageUserStatus;
+        this.Registration = Registration;
     }
 
     async getChatsByOwnerId(ownerId) {
@@ -64,6 +67,15 @@ class MessageServerStore {
 
     async getChatsByUserId (userId) {
         return await this.ChatUser.find({userId});
+    }
+
+    async updateUserRegistration(userId, token) {
+        const data = {
+            userId,
+            token,
+            date: (new Date()).toString(),
+        }
+        return await this.Registration.findOneAndUpdate({userId}, data, {upsert: true, });
     }
 
     async getMessagesByChatId(chatId) {
