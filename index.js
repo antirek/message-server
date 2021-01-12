@@ -10,6 +10,9 @@ const {createModels} = require('./models');
 const {MessageServerStore} = require('./store');
 const {TokenChecker} = require('./security');
 const {WServer} = require('./websocket');
+const {FirebaseClient} = require('./apiClients/firebaseClient');
+
+const serviceAccount = require('./config/serviceAccountKey.json');
 
 const dbConn = mongoose.createConnection(config.mongodb, {
   useNewUrlParser: true,
@@ -27,8 +30,11 @@ const store = new MessageServerStore({
   User, Chat, ChatUser, Message, MessageUserStatus,
   Bot, ChatBot, Registration,
 });
+
 const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();
+
+const firebaseClient = new FirebaseClient({Registration, serviceAccount});
 
 const app = createApp({
   apiDoc: require('./api/api-doc.js'),
@@ -36,6 +42,7 @@ const app = createApp({
   dependencies: {
     store,
     websocketServer,
+    firebaseClient,
   },
 }, security);
 
@@ -43,5 +50,5 @@ const server = http.createServer(app);
 websocketServer.setServer(server);
 
 server.listen(config.port, () => {
-  console.log('started');
+  console.log('started', config);
 });
