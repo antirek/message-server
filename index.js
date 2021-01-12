@@ -1,10 +1,10 @@
 const config = require('config');
-const mongoose = require('mongoose');
-const path = require('path');
-mongoose.set('debug', true);
 const http = require("http");
+const path = require('path');
+const mongoose = require('mongoose');
+mongoose.set('debug', true);
 
-const createApp = require('./app').createApp;
+const {createApp} = require('./app');
 const {createModels} = require('./models');
 
 const {MessageServerStore} = require('./store');
@@ -33,7 +33,6 @@ const store = new MessageServerStore({
 
 const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();
-
 const firebaseClient = new FirebaseClient({Registration, serviceAccount});
 
 const app = createApp({

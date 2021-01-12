@@ -1,4 +1,4 @@
-module.exports = (store, websocketServer) => {
+module.exports = (store, websocketServer, firebaseClient) => {
   /**
     *
     * @param {Object} req
@@ -32,9 +32,14 @@ module.exports = (store, websocketServer) => {
     for (const user of users) {
       const countNotViewed = await store.getMessageUserStatusNotViewedCount(chatId, user.userId);
       console.log('countNotViewed', countNotViewed);
-      if (countNotViewed > 0) {
-        websocketServer.send(user.userId, JSON.stringify({type:'countNotViewed', content: {chatId, userId: user.userId, countNotViewed}}));
-      }
+      websocketServer.send(user.userId, JSON.stringify({
+        type:'countNotViewed',
+        content: {
+          chatId,
+          userId: user.userId,
+          countNotViewed,
+        },
+      }));
     }
     res.json(message);
   }
