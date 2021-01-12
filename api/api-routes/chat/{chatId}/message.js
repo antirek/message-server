@@ -58,7 +58,12 @@ module.exports = (store, websocketServer, firebaseClient) => {
         description: 'message json',
         schema: {
           type: 'object',
+          example: {
+            content: "example content",
+            type: "text"
+          },
         },
+        
       },
     ],
     responses: {

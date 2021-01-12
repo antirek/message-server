@@ -12,9 +12,6 @@ module.exports = {
     Error: {
       additionalProperties: true,
     },
-    Token: {
-      token: String,
-    },
   },
   securityDefinitions: {
    //X-API-Key: abcdef12345
