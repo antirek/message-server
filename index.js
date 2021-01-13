@@ -12,7 +12,7 @@ const {TokenChecker} = require('./security');
 const {WServer} = require('./websocket');
 const {FirebaseClient} = require('./apiClients/firebaseClient');
 
-const serviceAccount = require('./config/serviceAccountKey.json');
+const serviceAccount = require(config.serviceAccountKeyPath);
 
 const dbConn = mongoose.createConnection(config.mongodb, {
   useNewUrlParser: true,
