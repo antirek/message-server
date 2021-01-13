@@ -81,7 +81,6 @@ class MessageServerStore {
     async getMessagesByChatId(chatId) {
         const messages = await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
         return messages.reverse();
-
     }
 
     async appendUserToChat (userId, chatId) {

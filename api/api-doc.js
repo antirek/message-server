@@ -1,5 +1,3 @@
-const { stringify } = require("uuid");
-
 module.exports = {
   swagger: '2.0',
   basePath: '/v1',
