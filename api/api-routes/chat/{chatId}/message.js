@@ -22,17 +22,18 @@ module.exports = (store, websocketServer, firebaseClient) => {
 
     const users = await store.getUsersByChatId(chatId);
     console.log('send message users', users);
-    for (const user of users) {
-      if (user.userId === req.user.userId) {
-        console.log('skip session user', user.userId);
-        continue;
-      }
 
+    // websoket'ы рассылаем всем, а firebase всем, кроме отправителя
+    for (const user of users) {
       await store.setMessageUserStatus(chatId, user.userId, messageId, 'sended');
       if (user.userId === req.user.userId) { messageFormated.viewed = true;}
       console.log('message', messageFormated);
       websocketServer.send(user.userId, JSON.stringify({type: 'message', content: messageFormated}));
 
+      if (user.userId === req.user.userId) {
+        console.log('skip session user', user.userId);
+        continue;
+      }                  
       const m = {data: JSON.stringify(messageFormated), type: 'message'};
       console.log('firebase message', m);
       try {
