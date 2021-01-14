@@ -27,6 +27,14 @@ module.exports = (store, websocketServer, firebaseClient) => {
       if (user.userId === req.user.userId) { messageFormated.viewed = true;}
       console.log('message', messageFormated);
       websocketServer.send(user.userId, JSON.stringify({type: 'message', content: messageFormated}));
+
+      const m = {data: JSON.stringify(messageFormated), type: 'message'};
+      console.log('firebase message', m);
+      try {
+        await firebaseClient.sendMessage(user.userId, m);
+      } catch(e) {
+        console.log('error:', e);
+      }
     }
 
     for (const user of users) {
