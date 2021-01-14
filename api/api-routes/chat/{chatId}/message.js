@@ -23,6 +23,11 @@ module.exports = (store, websocketServer, firebaseClient) => {
     const users = await store.getUsersByChatId(chatId);
     console.log('send message users', users);
     for (const user of users) {
+      if (user.userId === req.user.userId) {
+        console.log('skip session user', user.userId);
+        continue;
+      }
+
       await store.setMessageUserStatus(chatId, user.userId, messageId, 'sended');
       if (user.userId === req.user.userId) { messageFormated.viewed = true;}
       console.log('message', messageFormated);
