@@ -23,12 +23,12 @@ const dbConn = mongoose.createConnection(config.mongodb, {
 
 const {
   User, Chat, ChatUser, Message, MessageUserStatus, 
-  Bot, ChatBot, Token, Registration,
+  Bot, ChatBot, Token, Registration, PhoneCode,
 } = createModels(dbConn);
 
 const store = new MessageServerStore({
   User, Chat, ChatUser, Message, MessageUserStatus,
-  Bot, ChatBot, Registration,
+  Bot, ChatBot, Registration, PhoneCode, Token,
 });
 
 const security = new TokenChecker({Token, User});

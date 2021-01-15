@@ -111,12 +111,24 @@ const createModels = (dbConn) => {
     },
   });
 
+  const PhoneCodeSchema = new mongoose.Schema({
+    phone: {
+      type: String,
+      unique: true,
+    },
+    code: {
+      type: String,
+      unique: true,
+    },
+  })
+
   const Sender = dbConn.model('Sender', SenderSchema);
   const Chat = dbConn.model('Chat', ChatSchema);
   const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
   const ChatBot = dbConn.model('ChatBot', ChatBotSchema);
   const Message = dbConn.model('Message', MessageSchema);
   const Token = dbConn.model('Token', TokenSchema);
+  const PhoneCode = dbConn.model('PhoneCode', PhoneCodeSchema);
   const Registration = dbConn.model('Registration', RegistrationSchema);
   const MessageUserStatus = dbConn.model('MessageUserStatus', MessageUserStatusSchema);
 
@@ -144,6 +156,7 @@ const createModels = (dbConn) => {
     MessageUserStatus,
     Bot,
     ChatBot,
+    PhoneCode,
   };
 }
 

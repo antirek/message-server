@@ -13,7 +13,7 @@ module.exports = (store) => {
 
   post.apiDoc = {
     summary: 'register FCM token',
-    operationId: 'createChat',
+    operationId: 'registerToken',
     tags: ['user'],
     produces: [
       'application/json',

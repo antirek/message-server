@@ -9,17 +9,21 @@ class MessageServerStore {
     Bot;
     ChatBot;
     Registration;
+    PhoneCode;
+    Token;
 
-    constructor ({User, Chat, Message, ChatUser, 
-        MessageUserStatus, Bot, ChatBot, Registration, }) {
+    constructor ({User, Chat, Message, ChatUser, Token,
+        MessageUserStatus, Bot, ChatBot, Registration, PhoneCode, }) {
         this.User = User;
         this.Chat = Chat;
+        this.Token = Token;
         this.ChatBot = ChatBot;
         this.Bot = Bot;
         this.ChatUser = ChatUser;
         this.Message = Message;
         this.MessageUserStatus = MessageUserStatus;
         this.Registration = Registration;
+        this.PhoneCode = PhoneCode;
     }
 
     async getChatsByOwnerId(ownerId) {
@@ -69,6 +73,8 @@ class MessageServerStore {
         return await this.ChatUser.find({userId});
     }
 
+
+    //// перенести код? start
     async updateUserRegistration(userId, token) {
         const data = {
             userId,
@@ -77,6 +83,29 @@ class MessageServerStore {
         }
         return await this.Registration.findOneAndUpdate({userId}, data, {upsert: true, });
     }
+
+    async updateAuthToken(userId, token) {
+        const data = {
+            userId,
+            token,
+        }
+        return await this.Token.findOneAndUpdate({userId}, data, {upsert: true, });
+    }
+
+    async updatePhoneCode(phone, code) {
+        const data = {
+            phone,
+            code,
+        };
+        return await this.PhoneCode.findOneAndUpdate({phone}, data, {upsert: true, });
+    }
+
+    async getCodeForPhone(phone) {
+        return await this.PhoneCode.findOne({phone});
+    }
+    //// end
+
+
 
     async getMessagesByChatId(chatId) {
         const messages = await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
