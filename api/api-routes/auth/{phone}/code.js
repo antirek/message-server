@@ -1,3 +1,6 @@
+const axios = require('axios');
+const config = require('config');
+
 module.exports = (store) => {
   /**
     *
@@ -12,7 +15,14 @@ module.exports = (store) => {
     console.log('code', code);
 
     await store.updatePhoneCode(phone, code);
-    // beebonClient.sendSMS(code, phone);
+
+    const url = config.beebonUrl + '/api/task/sms';
+    const response = await axios.post(url, {
+      number: phone,
+      source: '89830500208',
+      text: `${code}`,
+    });
+    console.log('beebon response', response);
     res.json({status: 'OK'});
   }
 
