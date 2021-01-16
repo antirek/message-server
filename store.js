@@ -56,7 +56,7 @@ class MessageServerStore {
         console.log('userIds array', userIds);
         const userProfiles = await this.User.find({userId:{$in:userIds}});        
         const userProfilesHash = {}; 
-        userProfiles.map(userProfile => {userProfilesHash[userProfile.userId] = userProfile; });
+        userProfiles.map(userProfile => { userProfilesHash[userProfile.userId] = userProfile; });
         const users = chatUserIds.map(chatUserId => {
             return userProfilesHash[chatUserId.userId] ? 
                 userProfilesHash[chatUserId.userId] : 
@@ -70,9 +70,11 @@ class MessageServerStore {
     }
 
     async getChatsByUserId (userId) {
-        return await this.ChatUser.find({userId});
+        const chatUserIds = await this.ChatUser.find({userId});
+        const chatIds = chatUserIds.map(chid => chid.chatId);
+        const chats = await this.Chat.find({chatId: {$in: chatIds}});    
+        return chats;
     }
-
 
     //// перенести код? start
     async updateUserRegistration(userId, token) {
