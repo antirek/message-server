@@ -55,11 +55,25 @@ module.exports = (store) => {
   }
 
   post.apiDoc = {
-    summary: 'get current user by token',
-    operationId: 'Me',
+    summary: 'set info curernt user',
+    operationId: 'updateMe',
     tags: ['user'],
     produces: [
       'application/json',
+    ],
+    parameters: [
+      {
+        in: 'body',
+        name: 'object',
+        description: 'user profile',
+        schema: {
+          type: 'object',
+          example: {
+            name: 'user name',
+            avatarUrl: 'https://cdn.quasar.dev/img/avatar2.jpg',
+          }
+        },
+      },
     ],
     responses: {
       200: {
