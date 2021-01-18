@@ -16,13 +16,15 @@ module.exports = (store) => {
       res.sendStatus(401);
       return;
     }
-  
+
     const token = uuidv4();
-    await store.updateAuthToken(phone, token);
-    const user = await store.getUser(phone);
+    let user = await store.getUser(phone);
     if (!user) {
-      await store.addUser(phone, '', '');
+      user = await store.addUser(phone, '', '');
     }
+    const userId = user.userId;
+    await store.updateAuthToken(userId, token);
+
     res.json({status: 'OK', token});
   }
 

@@ -86,7 +86,7 @@ class MessageServerStore {
         return await this.Registration.findOneAndUpdate({userId}, data, {upsert: true, });
     }
 
-    async updateAuthToken(userId, token) {
+    async updateAuthToken(userId, token) {        
         const data = {
             userId,
             token,
@@ -106,8 +106,6 @@ class MessageServerStore {
         return await this.PhoneCode.findOne({phone});
     }
     //// end
-
-
 
     async getMessagesByChatId(chatId) {
         const messages = await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
@@ -138,8 +136,10 @@ class MessageServerStore {
         return await message.save();
     }
 
-    async addUser (userId, name, avatarUrl) {
-        return await this.User.insertMany([{userId, name, avatarUrl}]);
+    async addUser (phone, name, avatarUrl) {
+        const userId = uuidv4();
+        const user = new this.User({userId, phone, name, avatarUrl});
+        return await user.save();
     }
 
     async getMessageUserStatusNotViewed(chatId, userId) {

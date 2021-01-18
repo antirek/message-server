@@ -5,11 +5,11 @@ module.exports = (store) => {
     * @param {Object} res
     */
   async function post(req, res) {
-    const { name, ownerId } = req.body;
+    const { name } = req.body;
     console.log('get request body', req.body);
     try {
       const chat = await store.addChat(name, req.user.userId);
-      console.log('chat 11', chat);
+      console.log('new chat', chat);
       const chatId = chat.chatId;
       await store.appendUserToChat(req.user.userId, chatId);
       res.json(chat);

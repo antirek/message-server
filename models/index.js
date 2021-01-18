@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 
 const createModels = (dbConn) => {
-  const SenderSchema = new mongoose.Schema({
+  const UserSchema = new mongoose.Schema({
     name: String,
     avatarUrl: String,
     userId: String,
-    botId: String,
-  },{ 
-    discriminatorKey: 'type', 
-    _id: false, 
-    collection: 'users',
+    phone: String,    
+  });
+
+  const BotSchema = new mongoose.Schema({
+    name: String,
+    avatarUrl: String,
+    userId: String,
   });
 
   const MessageSchema = new mongoose.Schema({
@@ -19,7 +21,7 @@ const createModels = (dbConn) => {
     },
     date: String,
     chatId: String,
-    sender: SenderSchema,
+    sender: mongoose.Schema.Types.Mixed,
     type: String,
     content: String,
   });
@@ -122,7 +124,8 @@ const createModels = (dbConn) => {
     },
   })
 
-  const Sender = dbConn.model('Sender', SenderSchema);
+  const User = dbConn.model('User', UserSchema);
+  const Bot = dbConn.model('Bot', BotSchema);
   const Chat = dbConn.model('Chat', ChatSchema);
   const ChatUser = dbConn.model('ChatUser', ChatUserSchema);
   const ChatBot = dbConn.model('ChatBot', ChatBotSchema);
@@ -131,20 +134,6 @@ const createModels = (dbConn) => {
   const PhoneCode = dbConn.model('PhoneCode', PhoneCodeSchema);
   const Registration = dbConn.model('Registration', RegistrationSchema);
   const MessageUserStatus = dbConn.model('MessageUserStatus', MessageUserStatusSchema);
-
-  const User = Sender.discriminator('user', new mongoose.Schema({  
-    userId: {
-      type: String,
-      unique: true,
-    }
-  }));
-
-  const Bot = Sender.discriminator('bot', new mongoose.Schema({  
-    botId: {
-      type: String,
-      unique: true,
-    },
-  }));
 
   return {
     User,
