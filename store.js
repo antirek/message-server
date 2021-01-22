@@ -78,6 +78,7 @@ class MessageServerStore {
 
     //// перенести код? start
     async updateUserRegistration(userId, token) {
+        await this.Registration.deleteMany({token});
         const data = {
             userId,
             token,
