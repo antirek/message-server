@@ -1,8 +1,11 @@
 const path = require('path');
 
 module.exports = {
-    port: 3010,
-    mongodb: 'mongodb://mongodb/message',
-    serviceAccountKeyPath: path.resolve('./config/serviceAccountKey.json'),
-    beebonUrl: "https://beebon.services.mobilon.ru",
-}
+  port: 3010,
+  mongodb: 'mongodb://mongodb/message',
+  serviceAccountKeyPath: path.resolve('./config/serviceAccountKey.json'),
+  beebon: {
+    url: "https://beebon.services.mobilon.ru",
+    source: '89830500208',
+  },
+};

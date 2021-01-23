@@ -11,9 +11,14 @@ class MessageServerStore {
     Registration;
     PhoneCode;
     Token;
+    Invite;
 
-    constructor ({User, Chat, Message, ChatUser, Token,
-        MessageUserStatus, Bot, ChatBot, Registration, PhoneCode, }) {
+    constructor ({
+        User, Chat, Message,
+        ChatUser, Token, MessageUserStatus,
+        Bot, ChatBot, Registration,
+        PhoneCode, Invite,
+    }) {
         this.User = User;
         this.Chat = Chat;
         this.Token = Token;
@@ -24,6 +29,7 @@ class MessageServerStore {
         this.MessageUserStatus = MessageUserStatus;
         this.Registration = Registration;
         this.PhoneCode = PhoneCode;
+        this.Invite = Invite;
     }
 
     async getChatsByOwnerId(ownerId) {
@@ -46,6 +52,10 @@ class MessageServerStore {
         return await this.User.findOne({userId});
     }
 
+    async getUserByPhone (phone) {
+        return await this.User.findOne({phone});
+    }
+
     async getChatByChatId (chatId) {
         return await this.Chat.findOne({chatId});
     }
@@ -63,6 +73,12 @@ class MessageServerStore {
                 { userId: chatUserId.userId, name: null, avatarUrl: null};
         });
         return users;
+    }
+
+    async addInvite(chatId, userId) {
+        const inviteId = uuidv4();
+        const invite = new this.Invite({inviteId, chatId, userId, status: "active"});
+        await invite.save();
     }
 
     async getBotsByChatId (chatId) {
@@ -136,7 +152,7 @@ class MessageServerStore {
         return await message.save();
     }
 
-    async addUser (phone, name, avatarUrl) {
+    async addUser (phone, name = '', avatarUrl = '') {
         const userId = uuidv4();
         const user = new this.User({userId, phone, name, avatarUrl});
         return await user.save();

@@ -5,27 +5,29 @@ module.exports = (store, beebonClient) => {
     * @param {Object} res
     */
   async function get(req, res) {
-    const {phone} = req.params;
+    const {chatId, phone} = req.params;
     console.log('get request params', req.params);
+    
+    let user;
+    user = await store.getUserByPhone(phone);
+    if(!user) {
+      user = await store.addUser(phone);
+    }
+    const invite = await this.store.addInvite(chatId, user.userId);
 
-    const code = Math.floor(Math.random() * 999) + 1000;
-    console.log('code', code);
-
-    await store.updatePhoneCode(phone, code);
-
-    const response = await beebonClient.sendSms(phone, `${code}`);
-    console.log('beebon response', response);
-    res.json({status: 'OK'});
+    const resp = await beebonClient.sendSms(phone, 'invite');
+    console.log('beebon response, send invite', resp);
+    
+    res.json(invite);
   }
 
   get.apiDoc = {
-    summary: 'send code by sms to phone',
-    operationId: 'requestCode',
-    tags: ['auth'],
+    summary: 'invite to chatId user via sms to phone',
+    operationId: 'inviteUserToChat',
+    tags: ['chat', 'invite'],
     produces: [
       'application/json',
     ],
-    security: [],
     responses: {
       200: {
         description: 'requested messages',
@@ -42,6 +44,13 @@ module.exports = (store, beebonClient) => {
   return {
     parameters: [
       {
+        name: 'chatId',
+        in: 'path',
+        type: 'string',
+        required: true,
+        description: 'chatId',
+      },
+      {
         name: 'phone',
         in: 'path',
         type: 'string',
@@ -49,6 +58,6 @@ module.exports = (store, beebonClient) => {
         description: 'phone',
       },
     ],
-    get,
+    get: get,
   };
 };

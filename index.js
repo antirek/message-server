@@ -11,6 +11,8 @@ const {MessageServerStore} = require('./store');
 const {TokenChecker} = require('./security');
 const {WServer} = require('./websocket');
 const {FirebaseClient} = require('./apiClients/firebaseClient');
+const {BeebonClient} = require('./apiClients/beebonClient');
+
 
 const serviceAccount = require(config.serviceAccountKeyPath);
 
@@ -34,6 +36,7 @@ const store = new MessageServerStore({
 const security = new TokenChecker({Token, User});
 const websocketServer = new WServer();
 const firebaseClient = new FirebaseClient({Registration, serviceAccount});
+const beebonClient = new BeebonClient(config.beebon);
 
 const app = createApp({
   apiDoc: require('./api/api-doc.js'),
@@ -42,6 +45,7 @@ const app = createApp({
     store,
     websocketServer,
     firebaseClient,
+    beebonClient,
   },
 }, security);
 
