@@ -1,3 +1,4 @@
+const axios = require('axios');
 
 class BeebonClient {
   url;
@@ -5,7 +6,7 @@ class BeebonClient {
 
   constructor ({url, source}) {
     this.url = url;
-    this.source = source; 
+    this.source = source;
   }
 
   async sendSms(number, text) {
@@ -18,6 +19,5 @@ class BeebonClient {
     return response;
   }
 }
-
 
 module.exports = {BeebonClient};

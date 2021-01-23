@@ -81,6 +81,10 @@ class MessageServerStore {
         await invite.save();
     }
 
+    async getInvitesByUserId(userId) {
+        return await this.Invite({userId, status: 'active',});
+    }
+
     async getBotsByChatId (chatId) {
         const chatBotIds = await this.ChatBot.find({chatId});
     }
