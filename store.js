@@ -82,7 +82,7 @@ class MessageServerStore {
     }
 
     async getInvitesByUserId(userId) {
-        return await this.Invite({userId, status: 'active',});
+        return await this.Invite.find({userId, status: 'active',});
     }
 
     async getBotsByChatId (chatId) {

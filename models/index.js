@@ -2,16 +2,22 @@ const mongoose = require('mongoose');
 
 const createModels = (dbConn) => {
   const UserSchema = new mongoose.Schema({
+    userId: {
+      type: String,
+      index: true,
+    },
     name: String,
     avatarUrl: String,
-    userId: String,
-    phone: String,    
+    phone: {
+      type: String,
+      unique: true,
+    },
   });
 
   const BotSchema = new mongoose.Schema({
+    botId: String,
     name: String,
     avatarUrl: String,
-    userId: String,
   });
 
   const MessageSchema = new mongoose.Schema({

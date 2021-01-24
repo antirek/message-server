@@ -9,15 +9,26 @@ module.exports = (store, beebonClient) => {
     console.log('get request params', req.params);
     
     let user;
+    let isNewUser = false;
     user = await store.getUserByPhone(phone);
     if(!user) {
       user = await store.addUser(phone);
+      isNewUser = true;
     }
-    const invite = await this.store.addInvite(chatId, user.userId);
 
-    const resp = await beebonClient.sendSms(phone, 'invite');
-    console.log('beebon response, send invite', resp);
-    
+    // check user in chat
+
+    const invite = await store.addInvite(chatId, user.userId);
+
+    if (!isNewUser) {
+      // send to firebase and websocket
+    }
+
+    if (isNewUser) {
+      const resp = await beebonClient.sendSms(phone, 'invite');
+      console.log('beebon response, send invite', resp);
+    }
+
     res.json(invite);
   }
 
