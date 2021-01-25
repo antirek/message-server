@@ -85,6 +85,10 @@ class MessageServerStore {
         return await this.Invite.find({userId, status: 'active',});
     }
 
+    async getActiveInviteById (inviteId) {
+        return await this.Invite.findOne({inviteId, status: 'active'});
+    }
+
     async getBotsByChatId (chatId) {
         const chatBotIds = await this.ChatBot.find({chatId});
     }
@@ -131,6 +135,11 @@ class MessageServerStore {
     async getMessagesByChatId(chatId) {
         const messages = await this.Message.find({chatId}).sort({"_id": -1}).limit(10);
         return messages.reverse();
+    }
+
+    async isUserInChat (userId, chatId) {
+        const chatUser = await this.ChatUser.findOne({userId, chatId});
+        return chatUser ? true : false;
     }
 
     async appendUserToChat (userId, chatId) {
