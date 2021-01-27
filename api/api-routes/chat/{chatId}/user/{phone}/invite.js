@@ -17,6 +17,13 @@ module.exports = (store, beebonClient) => {
     }
 
     // check user in chat
+    if (!isNewUser) {
+      const isUserInChat = await store.isUserInChat(user.userId, chatId);
+      if (isUserInChat) {
+        console.log('user', user.phone, 'already in chat', chatId);
+        return res.json({status:'OK', message: 'user already in chat'});
+      }
+    }
 
     const invite = await store.addInvite(chatId, user.userId);
 
@@ -25,7 +32,8 @@ module.exports = (store, beebonClient) => {
     }
 
     if (isNewUser) {
-      const resp = await beebonClient.sendSms(phone, 'invite');
+      const smsText = 'invite: download app and accept invite';
+      const resp = await beebonClient.sendSms(phone, smsText);
       console.log('beebon response, send invite', resp);
     }
 

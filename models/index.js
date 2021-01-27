@@ -4,13 +4,18 @@ const createModels = (dbConn) => {
   const UserSchema = new mongoose.Schema({
     userId: {
       type: String,
-      index: true,
+      unique: true,
     },
-    name: String,
+    name: {
+      type: String,
+      required: true,
+      default: 'Unknown',
+    },
     avatarUrl: String,
     phone: {
       type: String,
       unique: true,
+      required: true,
     },
   });
 
@@ -68,8 +73,14 @@ const createModels = (dbConn) => {
       type: String,
       unique: true,
     },
-    name: String,
-    ownerId: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    ownerId: {
+      type: String,
+      required: true,
+    },
   });
 
   const ChatUserSchema = new mongoose.Schema({

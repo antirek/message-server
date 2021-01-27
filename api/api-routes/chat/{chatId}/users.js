@@ -8,7 +8,14 @@ module.exports = (store) => {
     const {chatId} = req.params;
     console.log('get request params', req.params);
     const users = await store.getUsersByChatId(chatId);
-    res.json(users);
+    const usersData = users.map(user => {
+      return {
+        userId: user.userId,
+        avatarUrl: user.avatarUrl,
+        name: user.name,
+      };
+    })
+    res.json(usersData);
   }
 
   get.apiDoc = {
