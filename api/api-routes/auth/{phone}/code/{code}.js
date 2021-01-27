@@ -18,7 +18,7 @@ module.exports = (store) => {
     }
 
     const token = uuidv4();
-    let user = await store.getUser(phone);
+    let user = await store.getUserByPhone(phone);
     if (!user) {
       user = await store.addUser(phone, '', '');
     }
