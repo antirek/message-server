@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid').v4;
+const {nanoid} = require('nanoid');
 
 module.exports = (store) => {
   /**
@@ -17,11 +17,13 @@ module.exports = (store) => {
       return;
     }
 
-    const token = uuidv4();
+    const token = nanoid();
     let user = await store.getUserByPhone(phone);
     if (!user) {
-      user = await store.addUser(phone, '', '');
+      // @todo: придумать механику с именем
+      user = await store.addUser(phone, 'Unknown', '');
     }
+
     const userId = user.userId;
     await store.updateAuthToken(userId, token);
 

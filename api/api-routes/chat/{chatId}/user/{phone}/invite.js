@@ -12,7 +12,8 @@ module.exports = (store, beebonClient) => {
     let isNewUser = false;
     user = await store.getUserByPhone(phone);
     if(!user) {
-      user = await store.addUser(phone);
+      // @todo: придумать механику с именем
+      user = await store.addUser(phone, 'Unknown');
       isNewUser = true;
     }
 

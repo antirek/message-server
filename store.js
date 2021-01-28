@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid').v4;
+const {nanoid} = require('nanoid')
 
 class MessageServerStore {
     User;
@@ -11,7 +11,7 @@ class MessageServerStore {
     Registration;
     PhoneCode;
     Token;
-    Invite;
+    Invite; 
 
     constructor ({
         User, Chat, Message,
@@ -76,7 +76,7 @@ class MessageServerStore {
     }
 
     async addInvite(chatId, userId) {
-        const inviteId = uuidv4();
+        const inviteId = nanoid();
         const invite = new this.Invite({inviteId, chatId, userId, status: "active"});
         await invite.save();
     }
@@ -151,14 +151,14 @@ class MessageServerStore {
     }
 
     async addChat (name = null, ownerId = null) {
-        const chatId = uuidv4();
+        const chatId = nanoid();
         const chat = new this.Chat({chatId, name, ownerId});
         return await chat.save();
     }
 
     async appendMessage (chatId, sender, content, type) {
         const date = new Date();
-        const messageId = uuidv4();
+        const messageId = nanoid();
         const newMessage = {
             messageId, chatId, sender, content, type, date: date.toString()};
             //console.log('new message', newMessage)
@@ -167,7 +167,7 @@ class MessageServerStore {
     }
 
     async addUser (phone, name = '', avatarUrl = '') {
-        const userId = uuidv4();
+        const userId = nanoid();
         const user = new this.User({userId, phone, name, avatarUrl});
         return await user.save();
     }
