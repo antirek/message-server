@@ -5,16 +5,17 @@ module.exports = (store) => {
     * @param {Object} res
     */
   async function get(req, res) {
-    const userId = req.user.userId;
-    console.log('get request params', req.params);
-    const invites = await store.getActiveInvitesByUserId(userId);
+    const {chatId} = req.params;
+    const invites = await store.getActiveInvitesByChatId(chatId);
+    
+    console.log('invites', invites);
     res.json(invites);
   }
 
   get.apiDoc = {
-    summary: 'get invites current user',
+    summary: 'get invites by chatId',
     operationId: 'getInvites',
-    tags: ['invite'],
+    tags: ['chat', 'invite'],
     produces: [
       'application/json',
     ],
@@ -32,6 +33,15 @@ module.exports = (store) => {
   };
 
   return {
+    parameters: [
+      {
+        name: 'chatId',
+        in: 'path',
+        type: 'string',
+        required: true,
+        description: 'chatId',
+      },
+    ],
     get,
   };
 };

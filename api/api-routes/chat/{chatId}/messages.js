@@ -1,5 +1,3 @@
-const message = require("./message");
-
 module.exports = (store) => {
   /**
     *
@@ -55,6 +53,6 @@ module.exports = (store) => {
         description: 'chatId',
       },
     ],
-    get: get,
+    get,
   };
 };
