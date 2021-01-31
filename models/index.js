@@ -87,10 +87,18 @@ const createModels = (dbConn) => {
     chatId: {
       type: String,
       index: true,
+      required: true,
     },
     userId: {
       type: String,
       index: true,
+      required: true,
+    },
+    role: {
+      type: String,
+      index: true,
+      required: true,
+      default: 'user',
     },
   });
 
