@@ -8,4 +8,5 @@ module.exports = {
     url: "https://beebon.services.mobilon.ru",
     source: '89830500208',
   },
+  path: '/tmp',
 };
