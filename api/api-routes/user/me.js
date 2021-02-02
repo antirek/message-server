@@ -5,7 +5,12 @@ module.exports = (store) => {
     * @param {Object} res
     */
   async function get(req, res) {
-    res.json(req.user);
+    const user = Object.assign({}, req.user.toObject(),
+    {
+      avatarUrl: `http://localhost:3010/v1/user/${req.user.userId}/avatar`,
+    });
+    console.log('user', user);
+    res.json(user);
   }
 
   get.apiDoc = {

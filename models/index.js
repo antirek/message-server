@@ -11,7 +11,6 @@ const createModels = (dbConn) => {
       required: true,
       default: 'Unknown',
     },
-    avatarUrl: String,
     phone: {
       type: String,
       unique: true,
