@@ -23,7 +23,7 @@ class TokenChecker {
       return false;
     }
 
-    req.user = user;
+    req.user = user.toObject();
     return true;
   }
 }
