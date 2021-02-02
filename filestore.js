@@ -14,7 +14,12 @@ class Filestore {
   }
 
   async addAvatarForUserId (file, userId) {
-    fs.mkdirSync(path.join(this.path, userId));
+    const dir = path.join(this.path, userId);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
     return new Promise((resolve, reject) => {
       file.mv(this.getPathAvatarByUserId(userId), (err) => {
         if(err) {reject()}

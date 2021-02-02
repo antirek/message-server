@@ -10,6 +10,7 @@ module.exports = (filestore) => {
 
     if (!req.files || Object.keys(req.files).length === 0) {
       console.log('no files');
+      res.json({status: 'FAIL'});
     }
 
     //console.log(req.files);
