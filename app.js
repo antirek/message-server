@@ -8,7 +8,11 @@ const createApp = (api, security) => {
 
   app.use(express.json({limit: '1mb'}));
   app.use(cors());
-  app.use(fileUpload());
+  app.use(fileUpload({
+    limits: {
+      fileSize: 50 * 1024 * 1024,
+    },
+  }));
 
   openapi.initialize({
     apiDoc: api.apiDoc, // require('./api-doc.js'),
