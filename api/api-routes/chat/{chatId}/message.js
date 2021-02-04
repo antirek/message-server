@@ -11,7 +11,13 @@ module.exports = (store, websocketServer, firebaseClient) => {
     console.log('req user', req.user);
     console.log('get request params', req.params);
     console.log('get request body', req.body);
-    const message = await store.appendMessage(chatId, req.user, content, type);
+
+    const sender = {
+      name: req.user.name,
+      userId: req.user.userId,
+    };
+
+    const message = await store.appendMessage(chatId, sender, content, type);
     const messageId = message.messageId;
 
     const messageFormated = message.toObject();
@@ -103,6 +109,6 @@ module.exports = (store, websocketServer, firebaseClient) => {
         description: 'chatId',
       },
     ],
-    post: post,
+    post,
   };
 };
