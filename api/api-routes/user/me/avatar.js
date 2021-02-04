@@ -7,7 +7,7 @@ module.exports = (filestore) => {
   async function post(req, res) {
     const userId = req.user.userId;
     
-
+    console.log('upload avatar', userId);
     if (!req.files || Object.keys(req.files).length === 0) {
       console.log('no files');
       res.json({status: 'FAIL'});
@@ -16,7 +16,7 @@ module.exports = (filestore) => {
     //console.log(req.files);
     await filestore.addAvatarForUserId(req.files.avatar, userId);
     
-    res.json({});
+    res.json({status: 'OK'});
   }
 
   post.apiDoc = {

@@ -50,6 +50,7 @@ const app = createApp({
     firebaseClient,
     beebonClient,
     filestore,
+    config,
   },
 }, security);
 

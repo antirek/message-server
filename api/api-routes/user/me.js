@@ -1,4 +1,4 @@
-module.exports = (store) => {
+module.exports = (store, config) => {
   /**
     *
     * @param {Object} req
@@ -7,7 +7,7 @@ module.exports = (store) => {
   async function get(req, res) {
     const user = Object.assign({}, req.user,
     {
-      avatarUrl: `http://localhost:3010/v1/user/${req.user.userId}/avatar`,
+      avatarUrl: `${config.baseUrl}/v1/user/${req.user.userId}/avatar`,
     });
     console.log('user', user);
     res.json(user);
