@@ -16,7 +16,11 @@ class Filestore {
   async addAvatarForUserId (file, userId) {
     const dir = path.join(this.path, userId);
 
-    if (!fs.existsSync(dir)) {
+    const existDir = fs.existsSync(dir);
+    console.log({existDir});
+    
+    if (!existDir) {
+      console.log('mkdir', dir);
       fs.mkdirSync(dir);
     }
 
